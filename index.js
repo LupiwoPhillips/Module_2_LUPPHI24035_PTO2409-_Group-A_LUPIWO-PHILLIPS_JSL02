@@ -19,8 +19,37 @@ document.querySelector('#submitWorkout').addEventListener('click', displayWorkou
 // NOW LET'S DEBUG TO PREVENT DUPLICATE GOALS FROM BEING SUBMITTED 🚀
 
 const addNewGoal = () => {
-    const goalInput = document.querySelector('#goalInput').value;
+    const goalInput = document.querySelector('#goalInput').value.trim();
     const goalList = document.querySelector('#goalList');
+
+    if (!goalInput) {
+        alert('Goal cannot be empty!');
+        return;
+    }
+
+    // Retrieve all existing goals
+    const existingGoals = goalList.querySelectorAll('li');
+
+    // Check for duplicates
+    for (let goal of existingGoals) {
+        if (goal.textContent === goalInput) {
+            alert('This goal is already on the list!');
+            return; // Exit the function if a duplicate is found
+        }
+    }
+
+    // Add new goal if it's not a duplicate
+    const newGoal = document.createElement('li');
+    newGoal.textContent = goalInput;
+
+    // Add event listener to remove goal when clicked
+    newGoal.addEventListener('click', () => {
+        goalList.removeChild(newGoal);
+    });
+
+    goalList.appendChild(newGoal);
+};
+
     
     // ⚠️ Hint 1: Check for duplicates
     // Use 'goalList' to get all existing goals and check if 'goalInput' matches any of them.
@@ -36,11 +65,6 @@ const addNewGoal = () => {
     // The event listener that removes goals when clicked is not related to this issue.
     // Focus on preventing duplicates for now.
     
-    const newGoal = document.createElement('li');
-    newGoal.textContent = goalInput;
-    goalList.appendChild(newGoal);
-};
-
 // Add event listener to the goal submit button
 document.querySelector('#submitGoal').addEventListener('click', addNewGoal);
 
